@@ -127,3 +127,22 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+Project_1_Java/.idea/misc.xml
+Project_1_Java/.idea/modules.xml
+Project_1_Java/.idea/project-template.xml
+Project_1_Java/.idea/vcs.xml
+Project_1_Java/out/production/Project_1_Java/PLD/classes/AFD.class
+Project_1_Java/out/production/Project_1_Java/PLD/classes/Common.class
+Project_1_Java/out/production/Project_1_Java/PLD/classes/Lexer.class
+Project_1_Java/out/production/Project_1_Java/PLD/classes/Parser.class
+Project_1_Java/out/production/Project_1_Java/PLD/classes/Token.class
+Project_1_Java/out/production/Project_1_Java/PLD/Main.class
+Project_1_Java/Project_1_Java.iml
+Project_1/.idea/inspectionProfiles/profiles_settings.xml
+Project_1/.idea/misc.xml
+Project_1/.idea/modules.xml
+Project_1/.idea/Project_1.iml
+Project_1/.idea/vcs.xml
+Project_1_Java/.idea/description.html
+Project_1_Java/.idea/encodings.xml
+.DS_Store
