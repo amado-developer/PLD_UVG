@@ -1,40 +1,19 @@
 class Parser:
-    def __init__(self, regex):
-        self.regex = regex
-        self.regular_expressions = []
-        self.operators = ['*', "?", "|", "+", "(", ")"]
+    def __init__(self, lexer):
+        self.lexer = lexer
+        self.tokens = []
+        self.token_iterator = self.lexer.generate_token()
+
+    def check(self, identifier):
+        if self.token_iterator.id == identifier:
+            self.token_iterator = self.lexer.generate_token()
+        elif self.token_iterator.id != identifier:
+            print('Bad Character!')
 
     def parse(self):
-        flag = False
-        expression = ""
-        for pos in range(len(self.regex)):
-            char = self.regex[pos]
-            if char == "(":
-                flag = True
-                expression += char
-
-            elif flag:
-                expression += char
-
-            if char == ")":
-                if pos != len(self.regex) \
-                        and self.regex[pos + 1] in self.operators:
-                    expression += self.regex[pos + 1]
-                flag = False
-
-                self.regular_expressions.append([expression])
-                expression = ""
-
-            if char in self.operators and not flag:
-                pass
-        print(self.regular_expressions)
-
-    def get_alphabet(self):
-        alphabet = []
-        for char in self.regex:
-            if char not in alphabet \
-                    and (str(char).isalpha()
-                         or str(char).isalnum()):
-                alphabet.append(char)
-        alphabet.sort()
-        return alphabet
+        print(self.lexer.get_regex_length())
+        print(self.token_iterator.id)
+        self.check('CHAR')
+        print(self.token_iterator.id)
+        self.check('ASTERISK')
+        print(self.token_iterator.id)
