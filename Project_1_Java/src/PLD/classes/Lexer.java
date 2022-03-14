@@ -10,7 +10,6 @@ public class Lexer {
 
     public Lexer(String regex) {
         this.regex = regex;
-//        preProcessRegex();
     }
 
 
@@ -35,25 +34,6 @@ public class Lexer {
         }
         return null;
     }
-
-//    private void preProcessRegex() {
-//        String [] characters = this.regex.split("");
-//        String processedRegex = "";
-//
-//        for (int i = 0; i < characters.length; i++) {
-//            if(i + 1 < characters.length){
-//                if(!Arrays.asList(operators).contains(characters[i]) && !Arrays.asList(operators).contains(characters[i + 1])
-//                || characters[i].equals(")") && !Arrays.asList(operators).contains(characters[i + 1])){
-//
-//                    processedRegex += characters[i].equals(")") ? "&" :characters[i] + "&";
-//                    continue;
-//                }
-//            }
-//            processedRegex += characters[i];
-//        }
-//
-//        this.regex = processedRegex;
-//    }
 
     public ArrayList<String> get_alphabet(){
         //TODO

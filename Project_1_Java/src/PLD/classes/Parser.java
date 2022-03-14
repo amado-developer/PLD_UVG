@@ -23,7 +23,7 @@ public class Parser {
     /***
      * Function to convert the Infix Regex notation to a postfix one
      */
-    public void parse() {
+    public String parse() {
         int openFlags = 0;
         for (int i = 0; i < this.lexer.getRegexLength(); i++) {
             consumeToken();
@@ -55,6 +55,7 @@ public class Parser {
                             }
                         }
                     }else {
+                        //TODO
                         if(this.operators.peek().getPrecedence() == this.lookahead.getPrecedence()){
                             this.output.add(this.lookahead);
                         }else{
@@ -79,15 +80,20 @@ public class Parser {
             }
         }
 
-        for (Token t : operators) {
-            this.output.add(t);
+        int operatorsSize = this.operators.size();
+        for (int i = 0; i < operatorsSize; i++) {
+            Token token = this.operators.pop();
+            this.output.add(token);
         }
 
         this.operators.clear();
 
+        String postfixRegex = "";
 
         for (Token t : output) {
-            System.out.print(t.getValue());
+            postfixRegex += t.getValue();
         }
+
+        return postfixRegex;
     }
 }
