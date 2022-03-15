@@ -1,8 +1,5 @@
 package PLD.classes;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Transition {
     private Character value;
     private String key;

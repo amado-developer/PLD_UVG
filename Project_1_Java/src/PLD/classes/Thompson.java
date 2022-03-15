@@ -21,7 +21,7 @@ public class Thompson {
         ArrayList<Transition> transitions = new ArrayList<>();
         Transition transition = new Transition();
 
-        transition.addTransition("sf", character);
+        transition.addTransition("s1", character);
         transitions.add(transition);
 
         State initial_state = new State("s0", transitions, false, true);
@@ -35,86 +35,110 @@ public class Thompson {
         nfas.push(new NFA(alphabet, states));
     }
 
-
-
-    public void OR(NFA A, NFA B){
+    private void OR(NFA A, NFA B){
         ArrayList<State> states = new ArrayList<>();
         ArrayList<String> alphabet = new ArrayList<>();
-        int numberOfStates = A.getStatesNumber() + B.getStatesNumber() + 2;
+        int numberOfStates = A.getStatesNumber() + B.getStatesNumber();
 
-        int i = 1;
-        while (i < numberOfStates){
-            ArrayList<Transition> initalStateTransitions = new ArrayList<>();
-            initalStateTransitions.add(new Transition("s1", EPSILON));
-            State initial_state = new State("s0", initalStateTransitions, false, true);
-            initalStateTransitions.add(new Transition("s" + (B.getStates().size() + 1), EPSILON));
-            states.add(initial_state);
+        ArrayList<Transition> initTransitions = new ArrayList<>();
+        initTransitions.add(new Transition("s1", EPSILON));
+        initTransitions.add(new Transition("s" + (B.getStatesNumber() + 1), EPSILON));
+        State initial_state = new State("s0", initTransitions, false, true);
+        states.add(initial_state);
 
-            for(State state: B.getStates()){
-                State s = setNewORStates(state, i, numberOfStates - 1);
-                states.add(s);
-                i++;
-            }
-
-            for(State state: A.getStates()){
-                State s = setNewORStates(state, i, numberOfStates - 1);
-                states.add(s);
-                i++;
-            }
-
-            State final_state = new State("s" + (numberOfStates -1), new ArrayList<>(), true, false);
-            i++;
-            states.add(final_state);
+        for(State state : B.getStates()) {
+            setORStates(states, numberOfStates, state, 0);
         }
 
-        alphabet.add(String.valueOf(EPSILON));
-        alphabet.addAll(B.getAlphabet());
-        alphabet.addAll(A.getAlphabet());
+        for(State state : A.getStates()) {
+            setORStates(states, numberOfStates, state, B.getStates().size());
+        }
 
+        State final_state = new State("s" + (numberOfStates + 1), new ArrayList<>(), true, false);
+        states.add((final_state));
         nfas.push(new NFA(alphabet, states));
     }
 
-    private State setNewORStates(State state, int i, int currentFinalStateNewValue) {
+    private void setORStates(ArrayList<State> states, int numberOfStates, State state, int extraValue) {
+        int stateNumber = Integer.parseInt(String.valueOf(state.getId().charAt(1)));
+        state.setId("s" + (stateNumber + 1 + extraValue));
+        state.setInitial(false);
+        state.setFinal(false);
 
-        int transitionNumbers = state.getTransitions().size();
-
-        if(transitionNumbers > 0){
+        if(state.getTransitions().size() == 0){
+            ArrayList<Transition> tempTransitions = new ArrayList<>();
+            Transition tempTransition1 = new Transition();
+            tempTransition1.addTransition("s" + (numberOfStates + 1), EPSILON);
+            tempTransitions.add(tempTransition1);
+            state.setTransitions(tempTransitions);
+        }else{
             for(Transition transition: state.getTransitions()){
-                String transitionPosition = String.valueOf(transition.getKey().charAt(1));
-//                if(state.getId().equals("sf")){
-//                    transition.setKey("s" + currentFinalStateNewValue);
-//                }
-                if(transitionPosition.equals("f")){
-                    transition.setKey("s" + (i + 1));
-                }else {
-                    transition.setKey("s" + (Integer.parseInt(transitionPosition) + 1));
-                    transition.setValue(transition.getValue());
+                int transitionNumber = Integer.parseInt(String.valueOf(transition.getKey().charAt(1)));
+                transition.setKey("s" + (transitionNumber + 1 + extraValue));
+            }
+        }
+        states.add(state);
+    }
+
+    /**
+     * Executes the KLEAN operation
+     * @param A where A is an NFA
+     */
+    private void KLEAN(NFA A){
+        //TODO
+        ArrayList<State> states = new ArrayList<>();
+        ArrayList<String> alphabet = new ArrayList<>();
+        int numberOfStates = A.getStatesNumber();
+
+        ArrayList<Transition> transitions = new ArrayList<>();
+        transitions.add(new Transition("s1", EPSILON));
+        transitions.add(new Transition("s" + (numberOfStates + 1), EPSILON));
+        State initial_state = new State("s0", transitions, false, true);
+
+        states.add(initial_state);
+
+
+        for(State state : A.getStates()){
+            int stateNumber = Integer.parseInt(String.valueOf(state.getId().charAt(1)));
+            state.setId("s" + (stateNumber + 1));
+            state.setInitial(false);
+            state.setFinal(false);
+
+            if(state.getTransitions().size() == 0){
+                ArrayList<Transition> tempTransitions = new ArrayList<>();
+                Transition tempTransition1 = new Transition();
+                Transition tempTransition2 = new Transition();
+                tempTransition1.addTransition("s" + (numberOfStates + 1), EPSILON);
+                tempTransition2.addTransition("s1", EPSILON);
+                tempTransitions.add(tempTransition1);
+                tempTransitions.add(tempTransition2);
+                state.setTransitions(tempTransitions);
+            }else{
+                for(Transition transition: state.getTransitions()){
+                    int transitionNumber = Integer.parseInt(String.valueOf(transition.getKey().charAt(1)));
+                    transition.setKey("s" + (transitionNumber + 1));
                 }
             }
 
-        }else{
-            ArrayList<Transition> transitions = new ArrayList<>();
-            Transition transition = new Transition();
-            transition.addTransition("s" + currentFinalStateNewValue, EPSILON);
-            transitions.add(transition);
-            state.setTransitions(transitions);
+            states.add(state);
         }
-
-        state.setFinal(false);
-        state.setInitial(false);
-        state.setId("s" + i);
-        return state;
+        State final_state = new State("s" + (numberOfStates + 1), new ArrayList<>(), true, false);
+        states.add((final_state));
+        nfas.push(new NFA(alphabet, states));
     }
+
 
     public void executeAlgorithm(){
         this.regex = parser.parse();
         baseStep('a');
         baseStep('b');
+
         //a|b
         //ab | c |
         OR(nfas.pop(), nfas.pop());
         baseStep('c');
         OR(nfas.pop(), nfas.pop());
+        KLEAN(this.nfas.pop());
         System.out.println(nfas.size());
         System.out.println("we did it");
 //        for (int i = 0; i < this.regex.length(); i++) {
