@@ -2,15 +2,27 @@ package PLD.classes;
 
 import PLD.Interfaces.FiniteStateMachine;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Stack;
 
 public class NFA {
-    private String[] alphabet;
+    private ArrayList<String> alphabet;
     private ArrayList<State> states = new ArrayList<>();
 
-    public NFA(String[] alphabet, ArrayList<State> states, String s0, String sf) {
+    public NFA(ArrayList<String> alphabet, ArrayList<State> states) {
         this.alphabet = alphabet;
         this.states = states;
+    }
+
+    public ArrayList<State> getStates() {
+        return states;
+    }
+
+    public ArrayList<String> getAlphabet() {
+        return alphabet;
+    }
+
+    public int getStatesNumber(){
+        return states.size();
     }
 }

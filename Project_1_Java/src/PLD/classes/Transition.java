@@ -4,13 +4,34 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Transition {
-    private Map<String, Character> transition = new HashMap<>();
+    private Character value;
+    private String key;
 
-    public Map<String, Character> getTransition() {
-        return transition;
+    public Transition(){}
+
+    public Transition(String key, char value){
+        this.key = key;
+        this.value = value;
     }
 
     public void addTransition(String key, char value){
-        this.transition.put(key, value);
+        this.key = key;
+        this.value = value;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public void setValue(Character value) {
+        this.value = value;
+    }
+
+    public Character getValue() {
+        return value;
+    }
+
+    public String getKey() {
+        return key;
     }
 }
