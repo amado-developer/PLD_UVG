@@ -127,20 +127,69 @@ public class Thompson {
         nfas.push(new NFA(alphabet, states));
     }
 
+    /**
+     * Executes the KLEAN operation
+     * @param A where A is a NFA
+     * @param B where B is a NFA
+     */
+    private void CONCAT(NFA A, NFA B){
+        //TODO
+        ArrayList<State> states = new ArrayList<>();
+        ArrayList<String> alphabet = new ArrayList<>();
+        int numberOfStates = B.getStatesNumber() - 1;
+
+        State a = B.getStates().get(B.getStates().size() - 1);
+        State b = A.getStates().get(0);
+        a.setFinal(false);
+        b.setInitial(false);
+
+        states.addAll(B.getStates());
+        states.remove(states.size() - 1);
+
+        for(State state: A.getStates()){
+            for(Transition transition: state.getTransitions()){
+                int newPosition = Integer.parseInt(String.valueOf(transition.getKey().charAt(1))) + numberOfStates;
+                transition.setKey("s" + newPosition);
+            }
+
+            if(state.getId().equals("s0")){
+                state.setId("s" + numberOfStates);
+            }else {
+                state.setId("s" + (Integer.parseInt(String.valueOf(state.getId().charAt(1))) + numberOfStates));
+            }
+
+
+            states.add(state);
+        }
+        nfas.push(new NFA(alphabet, states));
+    }
+
+    private void PLUS(NFA A){
+        KLEAN(A);
+        NFA kleanNFA = this.nfas.pop();
+        baseStep('a');
+        CONCAT(kleanNFA, this.nfas.pop());
+    }
 
     public void executeAlgorithm(){
         this.regex = parser.parse();
         baseStep('a');
-        baseStep('b');
-
+        NFA a = nfas.pop();
+//        baseStep('b');
+        PLUS(a);
+//        CONCAT(this.nfas.pop(), this.nfas.pop());
+//        OR(nfas.pop(), nfas.pop());
+//        baseStep('a');
+//        CONCAT(this.nfas.pop(), this.nfas.pop());
         //a|b
         //ab | c |
-        OR(nfas.pop(), nfas.pop());
-        baseStep('c');
-        OR(nfas.pop(), nfas.pop());
-        KLEAN(this.nfas.pop());
+//        OR(nfas.pop(), nfas.pop());
+//        baseStep('c');
+//        OR(nfas.pop(), nfas.pop());
+//        KLEAN(this.nfas.pop());
         System.out.println(nfas.size());
         System.out.println("we did it");
+//        System.out.printf(regex);
 //        for (int i = 0; i < this.regex.length(); i++) {
 //            char character = this.regex.charAt(i);
 //            baseStep(character);

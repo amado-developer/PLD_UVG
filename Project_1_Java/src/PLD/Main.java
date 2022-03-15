@@ -7,7 +7,7 @@ import PLD.classes.Thompson;
 public class Main {
 
     public static void main(String[] args) {
-        String regex= "a|b*(a&b)";
+        String regex= "((a|b)|c)*";
         Thompson thompson = new Thompson(regex);
         thompson.executeAlgorithm();
     }

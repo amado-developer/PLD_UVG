@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class NFA {
     private ArrayList<String> alphabet;
-    private ArrayList<State> states = new ArrayList<>();
+    private ArrayList<State> states;
 
     public NFA(ArrayList<String> alphabet, ArrayList<State> states) {
         this.alphabet = alphabet;
@@ -24,5 +24,13 @@ public class NFA {
 
     public int getStatesNumber(){
         return states.size();
+    }
+
+    public void setAlphabet(ArrayList<String> alphabet) {
+        this.alphabet = alphabet;
+    }
+
+    public void setStates(ArrayList<State> states) {
+        this.states = states;
     }
 }
