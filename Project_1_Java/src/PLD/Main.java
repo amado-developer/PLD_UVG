@@ -9,7 +9,9 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        String regex= "((a|b)|c)*";
+        String regex= "(b|b)*&a&b&b&(a|b)*";
+        // bb|*b&b&ab|
+        //
         Thompson thompson = new Thompson(regex);
         thompson.executeAlgorithm();
     }

@@ -172,69 +172,65 @@ public class Thompson {
 
     public void executeAlgorithm() throws IOException, InterruptedException {
         this.regex = parser.parse();
-        System.out.println(this.regex);
-        //((a|b)|c)*
-        //ab|c|*
-//        baseStep('a');
-//        PLUS(this.nfas.pop());
+        for (int i = 0; i < this.regex.length(); i++) {
+            char character = this.regex.charAt(i);
+            switch (character) {
+                case '*':  KLEAN(this.nfas.pop()); break;
+                case '+':  PLUS(this.nfas.pop()); break;
+                case '?':
+                    baseStep(EPSILON);
+                    OR(this.nfas.pop(), this.nfas.pop());
+                    break;
+                case '&':  CONCAT(this.nfas.pop(), this.nfas.pop()); break;
+                case '|':  OR(this.nfas.pop(), this.nfas.pop());break;
+                default:   baseStep(character); break;
+            }
+        }
+//        baseStep('b');
 //        baseStep('b');
 //        OR(this.nfas.pop(), this.nfas.pop());
 //        KLEAN(this.nfas.pop());
-//        baseStep('c');
+//        baseStep('a');
+//        CONCAT(this.nfas.pop(), this.nfas.pop());
+//        baseStep('b');
+//        CONCAT(this.nfas.pop(), this.nfas.pop());
+//        baseStep('b');
+//        CONCAT(this.nfas.pop(), this.nfas.pop());
+//        baseStep('a');
+//        baseStep('b');
 //        OR(this.nfas.pop(), this.nfas.pop());
 //        KLEAN(this.nfas.pop());
+//        CONCAT(this.nfas.pop(), this.nfas.pop());
 
-//        NFA finalSM = this.nfas.pop();
-//
-//        ArrayList<String> graph = new ArrayList<>();
-//        for(State state: finalSM.getStates()){
-//            if(state.isFinal()){
-//                graph.add(state.getId());
-//                continue;
-//            }
-//            for(Transition transition: state.getTransitions()){
-//                graph.add(state.getId() + "|" + transition.getKey() + "|" + transition.getValue());
-//            }
-//        }
-//
-//        try {
-//            FileWriter writer = new FileWriter("NFA.txt");
-//            for(String line: graph){
-//                System.out.println(line);
-//                writer.write(line + "\n");
-//            }
-//
-//            writer.close();
-//            System.out.println("Successfully wrote to the file.");
-//        } catch (IOException e) {
-//            System.out.println("An error occurred.");
-//            e.printStackTrace();
-//        }
-//
-//        Runtime.getRuntime().exec("/usr/local/bin/python main.py");
-//        //
-////        baseStep('a');
-////        baseStep('b');
-////        CONCAT(this.nfas.pop(), this.nfas.pop());
-////        NFA a = nfas.pop();
-////        baseStep('b');
-////        PLUS(a);
-////        CONCAT(this.nfas.pop(), this.nfas.pop());
-////        OR(nfas.pop(), nfas.pop());
-////        baseStep('a');
-////        CONCAT(this.nfas.pop(), this.nfas.pop());
-//        //a|b
-//        //ab | c |
-////        OR(nfas.pop(), nfas.pop());
-////        baseStep('c');
-////        OR(nfas.pop(), nfas.pop());
-////        KLEAN(this.nfas.pop());
-////        System.out.println(nfas.size());
-////        System.out.println("we did it");
-////        System.out.printf(regex);
-////        for (int i = 0; i < this.regex.length(); i++) {
-////            char character = this.regex.charAt(i);
-////            baseStep(character);
-////        }
+        //bb|*a&b&b&ab|*&
+
+        NFA finalSM = this.nfas.pop();
+
+        ArrayList<String> graph = new ArrayList<>();
+        for(State state: finalSM.getStates()){
+            if(state.isFinal()){
+                graph.add(state.getId());
+                continue;
+            }
+            for(Transition transition: state.getTransitions()){
+                graph.add(state.getId() + "|" + transition.getKey() + "|" + transition.getValue());
+            }
+        }
+
+        try {
+            FileWriter writer = new FileWriter("NFA.txt");
+            for(String line: graph){
+                System.out.println(line);
+                writer.write(line + "\n");
+            }
+
+            writer.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+        Runtime.getRuntime().exec("/usr/local/bin/python main.py");
     }
 }

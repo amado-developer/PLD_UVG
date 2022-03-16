@@ -23,7 +23,6 @@ public class Parser {
     /***
      * Function to convert the Infix Regex notation to a postfix one
      */
-    //((a|b)|c)*
     public String parse() {
         for (int i = 0; i < this.lexer.getRegexLength(); i++) {
             consumeToken();
