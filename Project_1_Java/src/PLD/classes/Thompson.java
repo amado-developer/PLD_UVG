@@ -1,6 +1,5 @@
 package PLD.classes;
-
-import java.lang.reflect.Array;
+import java.io.*;
 import java.util.*;
 
 public class Thompson {
@@ -164,19 +163,60 @@ public class Thompson {
         nfas.push(new NFA(alphabet, states));
     }
 
+    //TODO
     private void PLUS(NFA A){
+        NFA B = new NFA(A);
         KLEAN(A);
-        NFA kleanNFA = this.nfas.pop();
-        baseStep('a');
-        CONCAT(kleanNFA, this.nfas.pop());
+        CONCAT(this.nfas.pop(), B);
     }
 
-    public void executeAlgorithm(){
+    public void executeAlgorithm() throws IOException, InterruptedException {
         this.regex = parser.parse();
+        //((a|b)|c)*
+        //ab|c|*
         baseStep('a');
-        NFA a = nfas.pop();
+        PLUS(this.nfas.pop());
 //        baseStep('b');
-        PLUS(a);
+//        OR(this.nfas.pop(), this.nfas.pop());
+//        KLEAN(this.nfas.pop());
+//        baseStep('c');
+//        OR(this.nfas.pop(), this.nfas.pop());
+//        KLEAN(this.nfas.pop());
+
+        NFA finalSM = this.nfas.pop();
+
+        ArrayList<String> graph = new ArrayList<>();
+        for(State state: finalSM.getStates()){
+            if(state.isFinal()){
+                graph.add(state.getId());
+                continue;
+            }
+            for(Transition transition: state.getTransitions()){
+                graph.add(state.getId() + "|" + transition.getKey() + "|" + transition.getValue());
+            }
+        }
+
+        try {
+            FileWriter writer = new FileWriter("NFA.txt");
+            for(String line: graph){
+                System.out.println(line);
+                writer.write(line + "\n");
+            }
+
+            writer.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+        //
+//        baseStep('a');
+//        baseStep('b');
+//        CONCAT(this.nfas.pop(), this.nfas.pop());
+//        NFA a = nfas.pop();
+//        baseStep('b');
+//        PLUS(a);
 //        CONCAT(this.nfas.pop(), this.nfas.pop());
 //        OR(nfas.pop(), nfas.pop());
 //        baseStep('a');
@@ -187,8 +227,8 @@ public class Thompson {
 //        baseStep('c');
 //        OR(nfas.pop(), nfas.pop());
 //        KLEAN(this.nfas.pop());
-        System.out.println(nfas.size());
-        System.out.println("we did it");
+//        System.out.println(nfas.size());
+//        System.out.println("we did it");
 //        System.out.printf(regex);
 //        for (int i = 0; i < this.regex.length(); i++) {
 //            char character = this.regex.charAt(i);

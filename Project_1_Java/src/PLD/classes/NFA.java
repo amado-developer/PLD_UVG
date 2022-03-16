@@ -14,6 +14,15 @@ public class NFA {
         this.states = states;
     }
 
+    public NFA(NFA obj) {
+        this.alphabet = obj.alphabet;
+        this.states = new ArrayList<>();
+        for(State state: obj.states){
+            State tempState = new State(state);
+            this.states.add(tempState);
+        }
+    }
+
     public ArrayList<State> getStates() {
         return states;
     }
@@ -33,4 +42,5 @@ public class NFA {
     public void setStates(ArrayList<State> states) {
         this.states = states;
     }
+
 }

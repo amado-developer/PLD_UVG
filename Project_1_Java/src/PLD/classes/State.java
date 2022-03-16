@@ -17,6 +17,18 @@ public class State {
         this.isInitial = isInitial;
     }
 
+    public State(State obj) {
+        this.id = obj.id;
+        this.transitions = new ArrayList<>();
+        this.isFinal = obj.isFinal;
+        this.isInitial = obj.isInitial;
+
+        for(Transition transition: obj.transitions){
+            Transition tempTransition = new Transition(transition);
+            this.transitions.add(tempTransition);
+        }
+    }
+
     public String getId() {
         return id;
     }
