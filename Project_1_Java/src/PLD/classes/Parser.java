@@ -23,60 +23,26 @@ public class Parser {
     /***
      * Function to convert the Infix Regex notation to a postfix one
      */
+    //((a|b)|c)*
     public String parse() {
-        int openFlags = 0;
         for (int i = 0; i < this.lexer.getRegexLength(); i++) {
             consumeToken();
-
-            if(this.operators.size() == 0){
-                if (this.lookahead.getId().equals("CHAR")) {
-                    this.output.add(this.lookahead);
-                }else{
-                    this.operators.push(this.lookahead);
+            if(this.lookahead.getId().equals("OPEN_PAR")){
+                this.operators.push(this.lookahead);
+            }
+            else if(this.lookahead.getId().equals("CLOSE_PAR")){
+                while (!this.operators.peek().getId().equals("OPEN_PAR")){
+                    this.output.add(this.operators.pop());
                 }
-            } else {
-                if (this.lookahead.getId().equals("CHAR")) {
-                    this.output.add(this.lookahead);
-                } else if (this.lookahead.getId().equals("OPEN_PAR")) {
-                    openFlags++;
-
-                    this.operators.push(this.lookahead);
-
-                } else if(openFlags > 0){
-                    if (this.lookahead.getId().equals("CLOSE_PAR")) {
-                        boolean flag = true;
-                        openFlags--;
-                        while (flag) {
-                            Token t = operators.pop();
-                            if (t.getId().equals("OPEN_PAR")) {
-                                flag = false;
-                            } else {
-                                this.output.add(t);
-                            }
-                        }
-                    }else {
-                        //TODO
-                        if(this.operators.peek().getPrecedence() == this.lookahead.getPrecedence()){
-                            this.output.add(this.lookahead);
-                        }else{
-                            this.operators.push(this.lookahead);
-                        }
-                    }
-                }else{
-                    if((this.operators.peek().getPrecedence() >= this.lookahead.getPrecedence())) {
-                        Token t = this.operators.pop();
-                        this.output.add(t);
-                        if(this.operators.size() > 0 &&
-                                this.operators.peek().getPrecedence() == this.lookahead.getPrecedence()){
-                            this.output.add(this.lookahead);
-                        }else{
-                            this.operators.push(this.lookahead);
-                        }
-
-                    } else {
-                        this.operators.push(this.lookahead);
-                    }
+                this.operators.pop();
+            }else if(this.lookahead.getId().equals("CHAR")){
+                this.output.add(this.lookahead);
+            }else {
+                while (this.operators.size() > 0 && this.lookahead.getPrecedence() <= this.operators.peek().getPrecedence()
+                && !this.operators.peek().getId().equals("OPEN_PAR") && !this.operators.peek().getId().equals("CLOSE_PAR")){
+                    this.output.add(this.operators.pop());
                 }
+                this.operators.push(this.lookahead);
             }
         }
 
@@ -88,12 +54,12 @@ public class Parser {
 
         this.operators.clear();
 
-        String postfixRegex = "";
+        StringBuilder postfixRegex = new StringBuilder();
 
         for (Token t : output) {
-            postfixRegex += t.getValue();
+            postfixRegex.append(t.getValue());
         }
 
-        return postfixRegex;
+        return postfixRegex.toString();
     }
 }
