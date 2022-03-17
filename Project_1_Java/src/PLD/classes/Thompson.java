@@ -7,7 +7,7 @@ public class Thompson {
     private String regex;
     private Lexer lexer;
     private Parser parser;
-    private final char EPSILON = '\u03F5';
+    public static final char EPSILON = '\u03F5';
 
     public Thompson(String regex) {
         this.regex = regex;
@@ -170,39 +170,22 @@ public class Thompson {
         CONCAT(this.nfas.pop(), B);
     }
 
-    public void executeAlgorithm() throws IOException, InterruptedException {
+    public NFA executeAlgorithm() throws IOException, InterruptedException {
         this.regex = parser.parse();
         for (int i = 0; i < this.regex.length(); i++) {
             char character = this.regex.charAt(i);
             switch (character) {
-                case '*':  KLEAN(this.nfas.pop()); break;
-                case '+':  PLUS(this.nfas.pop()); break;
-                case '?':
+                case '*' -> KLEAN(this.nfas.pop());
+                case '+' -> PLUS(this.nfas.pop());
+                case '?' -> {
                     baseStep(EPSILON);
                     OR(this.nfas.pop(), this.nfas.pop());
-                    break;
-                case '&':  CONCAT(this.nfas.pop(), this.nfas.pop()); break;
-                case '|':  OR(this.nfas.pop(), this.nfas.pop());break;
-                default:   baseStep(character); break;
+                }
+                case '&' -> CONCAT(this.nfas.pop(), this.nfas.pop());
+                case '|' -> OR(this.nfas.pop(), this.nfas.pop());
+                default -> baseStep(character);
             }
         }
-//        baseStep('b');
-//        baseStep('b');
-//        OR(this.nfas.pop(), this.nfas.pop());
-//        KLEAN(this.nfas.pop());
-//        baseStep('a');
-//        CONCAT(this.nfas.pop(), this.nfas.pop());
-//        baseStep('b');
-//        CONCAT(this.nfas.pop(), this.nfas.pop());
-//        baseStep('b');
-//        CONCAT(this.nfas.pop(), this.nfas.pop());
-//        baseStep('a');
-//        baseStep('b');
-//        OR(this.nfas.pop(), this.nfas.pop());
-//        KLEAN(this.nfas.pop());
-//        CONCAT(this.nfas.pop(), this.nfas.pop());
-
-        //bb|*a&b&b&ab|*&
 
         NFA finalSM = this.nfas.pop();
 
@@ -232,5 +215,6 @@ public class Thompson {
         }
 
         Runtime.getRuntime().exec("/usr/local/bin/python main.py");
+        return finalSM;
     }
 }
