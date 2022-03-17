@@ -1,10 +1,6 @@
 package PLD.classes;
-
-import PLD.Interfaces.FiniteStateMachine;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Stack;
+
 
 public class NFA {
     private ArrayList<String> alphabet;
@@ -45,9 +41,7 @@ public class NFA {
     }
 
     private ArrayList<State> eClosure(ArrayList<State> states){
-
         ArrayList<State> temp = new ArrayList<>();
-        ArrayList<State> originalState = new ArrayList<>(states);
         while (states.size() > 0) {
             ArrayList<State> eClosureStates = new ArrayList<>();
             for (State currentState : states) {
@@ -98,7 +92,6 @@ public class NFA {
                             moveStates.add(currentState);
                     }
                 }
-
             }
         }
 
@@ -121,4 +114,27 @@ public class NFA {
         return currentStates.contains(this.states.get(this.states.size() - 1));
     }
 
+    public void convertToSubSets(){
+        ArrayList<ArrayList<State>> dStates = new ArrayList<>();
+        ArrayList<State> states = new ArrayList<>();
+        State s0 = this.states.stream()
+                .filter(s -> "s0".equals(s.getId()))
+                .findAny()
+                .orElse(null);
+        states.add(s0);
+        dStates.add(eClosure(states));
+
+        char [] alphabet = {'a', 'b'};
+        for (int i = 0; i < dStates.size(); i++) {
+            for(char character: alphabet){
+                ArrayList<State> newState = eClosure(move(dStates.get(i), character));
+                if(!dStates.contains(newState) && newState.size() > 0){
+                    dStates.add(newState);
+                }
+            }
+        }
+//        for(ArrayList<State> dCurrentStates: dStates) {
+//
+//        }
+    }
 }

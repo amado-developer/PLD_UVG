@@ -203,7 +203,6 @@ public class Thompson {
         try {
             FileWriter writer = new FileWriter("NFA.txt");
             for(String line: graph){
-                System.out.println(line);
                 writer.write(line + "\n");
             }
 
