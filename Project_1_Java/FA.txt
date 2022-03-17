@@ -1,0 +1,16 @@
+s0
+s0|s1|a|true
+s0|s2|b|true
+s0|s3|c|true
+s1
+s1|s1|a|true
+s1|s2|b|true
+s1|s3|c|true
+s2
+s2|s1|a|true
+s2|s2|b|true
+s2|s3|c|true
+s3
+s3|s1|a|true
+s3|s2|b|true
+s3|s3|c|true

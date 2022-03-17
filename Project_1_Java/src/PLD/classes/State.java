@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class State {
+public class State implements Comparable<State>{
     private String id;
     private ArrayList<Transition> transitions;
     private boolean isFinal;
@@ -59,5 +59,10 @@ public class State {
 
     public void setInitial(boolean initial) {
         isInitial = initial;
+    }
+
+    @Override
+    public int compareTo(State o) {
+        return this.id.compareTo(o.id);
     }
 }

@@ -1,10 +1,10 @@
 import graphviz
 
 def graph():
-    afn = graphviz.Digraph('finite_state_machine', filename='AFN.gv')
+    afn = graphviz.Digraph('finite_state_machine', filename='FA.gv')
     afn.attr(rankdir='LR', size='8,5')
 
-    with open("NFA.txt") as NFA:
+    with open("FA.txt") as NFA:
         lines = NFA.readlines()
 
     afn.attr('node', shape='doublecircle')

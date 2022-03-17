@@ -3,7 +3,7 @@ import java.io.*;
 import java.util.*;
 
 public class Thompson {
-    private Stack<NFA> nfas = new Stack<>();
+    private Stack<FA> nfas = new Stack<>();
     private String regex;
     private Lexer lexer;
     private Parser parser;
@@ -31,10 +31,10 @@ public class Thompson {
 
         ArrayList<String> alphabet = new ArrayList<>();
         alphabet.add(String.valueOf(character));
-        nfas.push(new NFA(alphabet, states));
+        nfas.push(new FA(alphabet, states));
     }
 
-    private void OR(NFA A, NFA B){
+    private void OR(FA A, FA B){
         ArrayList<State> states = new ArrayList<>();
         ArrayList<String> alphabet = new ArrayList<>();
         int numberOfStates = A.getStatesNumber() + B.getStatesNumber();
@@ -55,7 +55,7 @@ public class Thompson {
 
         State final_state = new State("s" + (numberOfStates + 1), new ArrayList<>(), true, false);
         states.add((final_state));
-        nfas.push(new NFA(alphabet, states));
+        nfas.push(new FA(alphabet, states));
     }
 
     private void setORStates(ArrayList<State> states, int numberOfStates, State state, int extraValue) {
@@ -81,9 +81,9 @@ public class Thompson {
 
     /**
      * Executes the KLEAN operation
-     * @param A where A is an NFA
+     * @param A where A is an FA
      */
-    private void KLEAN(NFA A){
+    private void KLEAN(FA A){
         //TODO
         ArrayList<State> states = new ArrayList<>();
         ArrayList<String> alphabet = new ArrayList<>();
@@ -123,15 +123,15 @@ public class Thompson {
         }
         State final_state = new State("s" + (numberOfStates + 1), new ArrayList<>(), true, false);
         states.add((final_state));
-        nfas.push(new NFA(alphabet, states));
+        nfas.push(new FA(alphabet, states));
     }
 
     /**
      * Executes the KLEAN operation
-     * @param A where A is a NFA
-     * @param B where B is a NFA
+     * @param A where A is a FA
+     * @param B where B is a FA
      */
-    private void CONCAT(NFA A, NFA B){
+    private void CONCAT(FA A, FA B){
         //TODO
         ArrayList<State> states = new ArrayList<>();
         ArrayList<String> alphabet = new ArrayList<>();
@@ -160,17 +160,17 @@ public class Thompson {
 
             states.add(state);
         }
-        nfas.push(new NFA(alphabet, states));
+        nfas.push(new FA(alphabet, states));
     }
 
     //TODO
-    private void PLUS(NFA A){
-        NFA B = new NFA(A);
+    private void PLUS(FA A){
+        FA B = new FA(A);
         KLEAN(A);
         CONCAT(this.nfas.pop(), B);
     }
 
-    public NFA executeAlgorithm() throws IOException, InterruptedException {
+    public FA executeAlgorithm() throws IOException, InterruptedException {
         this.regex = parser.parse();
         for (int i = 0; i < this.regex.length(); i++) {
             char character = this.regex.charAt(i);
@@ -187,33 +187,8 @@ public class Thompson {
             }
         }
 
-        NFA finalSM = this.nfas.pop();
-
-        ArrayList<String> graph = new ArrayList<>();
-        for(State state: finalSM.getStates()){
-            if(state.isFinal()){
-                graph.add(state.getId());
-                continue;
-            }
-            for(Transition transition: state.getTransitions()){
-                graph.add(state.getId() + "|" + transition.getKey() + "|" + transition.getValue());
-            }
-        }
-
-        try {
-            FileWriter writer = new FileWriter("NFA.txt");
-            for(String line: graph){
-                writer.write(line + "\n");
-            }
-
-            writer.close();
-            System.out.println("Successfully wrote to the file.");
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-
-        Runtime.getRuntime().exec("/usr/local/bin/python main.py");
+        FA finalSM = this.nfas.pop();
+//        finalSM.graph(finalSM, false);
         return finalSM;
     }
 }
