@@ -145,7 +145,7 @@ public class FA {
 
         return moveStates;
     }
-    public Boolean simulate(String string){
+    public Boolean simulateAFN(String string){
 
         ArrayList<State> currentStates = new ArrayList<>();
         State state = states.stream()
@@ -162,7 +162,18 @@ public class FA {
         return currentStates.contains(this.states.get(this.states.size() - 1));
     }
 
-    public void convertToSubSets() throws IOException {
+    public  Boolean simulateAFD(String string){
+
+        ArrayList<State> currentStates = new ArrayList<>();
+        currentStates.add(states.get(0));
+        for(char character: string.toCharArray()){
+            currentStates = move(currentStates, character);
+        }
+
+        return currentStates.get(0).isFinal();
+    }
+
+    public FA convertToSubSets() throws IOException {
         ArrayList<ArrayList<State>> dStates = new ArrayList<>();
         ArrayList<State> states = new ArrayList<>();
         ArrayList<State> AFDStates = new ArrayList<>();
@@ -219,6 +230,6 @@ public class FA {
             }
         }
 
-        graph(new FA(new ArrayList<>(), AFDStates), true);
+        return new FA(new ArrayList<>(), AFDStates);
     }
 }
