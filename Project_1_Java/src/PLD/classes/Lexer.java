@@ -65,7 +65,10 @@ public class Lexer {
             if(i < regex.length() - 1){
                 if(regex.charAt(i) == ')' && isConcat(regex.charAt(i + 1))){
                     newRegex.append("&");
-                }else if(regex.charAt(i) == '*' && isConcat(regex.charAt(i + 1))){
+                }else if(regex.charAt(i) == '*'
+                        || regex.charAt(i) == '?'
+                        || regex.charAt(i) == '+'
+                        && isConcat(regex.charAt(i + 1))){
                     newRegex.append("&");
                 }else if(isConcat(regex.charAt(i)) && regex.charAt(i + 1) == '('){
                     newRegex.append("&");
