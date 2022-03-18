@@ -29,9 +29,7 @@ public class Thompson {
         states.add(initial_state);
         states.add(final_state);
 
-        ArrayList<String> alphabet = new ArrayList<>();
-        alphabet.add(String.valueOf(character));
-        nfas.push(new FA(alphabet, states));
+        nfas.push(new FA(new ArrayList<>(), states));
     }
 
     private void OR(FA A, FA B){
@@ -55,7 +53,7 @@ public class Thompson {
 
         State final_state = new State("s" + (numberOfStates + 1), new ArrayList<>(), true, false);
         states.add((final_state));
-        nfas.push(new FA(alphabet, states));
+        nfas.push(new FA(new ArrayList<>(), states));
     }
 
     private void setORStates(ArrayList<State> states, int numberOfStates, State state, int extraValue) {
@@ -123,7 +121,7 @@ public class Thompson {
         }
         State final_state = new State("s" + (numberOfStates + 1), new ArrayList<>(), true, false);
         states.add((final_state));
-        nfas.push(new FA(alphabet, states));
+        nfas.push(new FA(new ArrayList<>(), states));
     }
 
     /**
@@ -160,7 +158,7 @@ public class Thompson {
 
             states.add(state);
         }
-        nfas.push(new FA(alphabet, states));
+        nfas.push(new FA(new ArrayList<>(), states));
     }
 
     //TODO
@@ -188,7 +186,7 @@ public class Thompson {
         }
 
         FA finalSM = this.nfas.pop();
-//        finalSM.graph(finalSM, false);
+        finalSM.graph(finalSM, false);
         return finalSM;
     }
 }

@@ -2,53 +2,9 @@ digraph finite_state_machine {
 	rankdir=LR size="8,5"
 	node [shape=doublecircle]
 	s0
-	s17
+	s1
 
 	node [shape=circle]
-	s0 -> s1 [label="ϵ
-"]
-	s0 -> s7 [label="ϵ
-"]
-	s1 -> s2 [label="ϵ
-"]
-	s1 -> s4 [label="ϵ
-"]
-	s2 -> s3 [label=b
-]
-	s3 -> s6 [label="ϵ
-"]
-	s4 -> s5 [label=b
-]
-	s5 -> s6 [label="ϵ
-"]
-	s6 -> s7 [label="ϵ
-"]
-	s6 -> s1 [label="ϵ
-"]
-	s7 -> s8 [label=a
-]
-	s8 -> s9 [label=b
-]
-	s9 -> s10 [label=b
-]
-	s10 -> s11 [label="ϵ
-"]
-	s10 -> s17 [label="ϵ
-"]
-	s11 -> s12 [label="ϵ
-"]
-	s11 -> s14 [label="ϵ
-"]
-	s12 -> s13 [label=a
-]
-	s13 -> s16 [label="ϵ
-"]
-	s14 -> s15 [label=b
-]
-	s15 -> s16 [label="ϵ
-"]
-	s16 -> s17 [label="ϵ
-"]
-	s16 -> s11 [label="ϵ
+	s0 -> s1 [label="(
 "]
 }

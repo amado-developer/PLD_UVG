@@ -5,10 +5,10 @@ import java.util.*;
 
 
 public class FA {
-    private ArrayList<String> alphabet;
+    private ArrayList<Character> alphabet;
     private ArrayList<State> states;
 
-    public FA(ArrayList<String> alphabet, ArrayList<State> states) {
+    public FA(ArrayList<Character> alphabet, ArrayList<State> states) {
         this.alphabet = alphabet;
         this.states = states;
     }
@@ -26,7 +26,7 @@ public class FA {
         return states;
     }
 
-    public ArrayList<String> getAlphabet() {
+    public ArrayList<Character> getAlphabet() {
         return alphabet;
     }
 
@@ -34,7 +34,7 @@ public class FA {
         return states.size();
     }
 
-    public void setAlphabet(ArrayList<String> alphabet) {
+    public void setAlphabet(ArrayList<Character> alphabet) {
         this.alphabet = alphabet;
     }
 
@@ -80,7 +80,6 @@ public class FA {
             Runtime.getRuntime().exec("/usr/local/bin/python NFA.py");
     }
     private ArrayList<State> eClosure(ArrayList<State> states){
-        ArrayList<State> temp = new ArrayList<>();
         while (states.size() > 0) {
             ArrayList<State> eClosureStates = new ArrayList<>();
             for (State currentState : states) {
@@ -99,7 +98,6 @@ public class FA {
                                     eClosureStates.add(currentState);
                                 }
                                 eClosureStates.add(tempState);
-                                temp.add(tempState);
                             }else{
                                 if(!eClosureStates.contains(currentState))
                                     eClosureStates.add(currentState);
@@ -118,7 +116,6 @@ public class FA {
                 return eClosureStates;
             }
             states = eClosureStates;
-            temp.clear();
         }
         return  new ArrayList<>();
     }
@@ -168,12 +165,15 @@ public class FA {
         currentStates.add(states.get(0));
         for(char character: string.toCharArray()){
             currentStates = move(currentStates, character);
+            if(currentStates.size() == 0){
+                return false;
+            }
         }
 
         return currentStates.get(0).isFinal();
     }
 
-    public FA convertToSubSets() throws IOException {
+    public FA convertToSubSets(String regex) throws IOException {
         ArrayList<ArrayList<State>> dStates = new ArrayList<>();
         ArrayList<State> states = new ArrayList<>();
         ArrayList<State> AFDStates = new ArrayList<>();
@@ -185,7 +185,7 @@ public class FA {
         states.add(s0);
         dStates.add(eClosure(states));
 
-        char [] alphabet = {'a', 'b', 'c'};
+        setAlphabet(Lexer.set_alphabet(regex));
         for (int i = 0; i < dStates.size(); i++) {
             ArrayList<Transition> transitions = new ArrayList<>();
             int counter = i + 1;
