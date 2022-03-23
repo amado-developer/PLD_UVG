@@ -168,7 +168,7 @@ public class Thompson {
         CONCAT(this.nfas.pop(), B);
     }
 
-    public FA executeAlgorithm() throws IOException, InterruptedException {
+    public FA executeAlgorithm() throws IOException {
         this.regex = parser.parse();
         for (int i = 0; i < this.regex.length(); i++) {
             char character = this.regex.charAt(i);

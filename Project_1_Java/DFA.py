@@ -16,10 +16,19 @@ def graph():
     for line in lines:
         try:
             state, transition, value, is_accepted = line.split("|")
+            print(is_accepted.strip())
             if is_accepted.strip() == 'true':
-                afn.attr('node', shape='doublecircle')
-                afn.edge(state, transition, label=value)
-                acceptance.append(state)
+         
+                if(len(transition) > 0):
+                    afn.attr('node', shape='doublecircle')
+                    afn.edge(state, transition, label=value)
+                    acceptance.append(state)
+               
+                else:
+                    afn.attr('node', shape='doublecircle')
+                    afn.node(state)
+                    acceptance.append(state)
+                    print('no')
         except:
             pass
 
@@ -31,7 +40,6 @@ def graph():
                 afn.edge(state, transition, label=value)
         except:
             pass
-    print(acceptance)
 
     afn.view()
 

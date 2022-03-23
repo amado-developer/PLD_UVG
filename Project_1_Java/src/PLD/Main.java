@@ -23,30 +23,49 @@ public class Main {
             switch (option){
 
                 case "1" -> {
+
                     System.out.println("Insert the Regular Expresion");
                     regex = reader.nextLine();
+                    long algorithmStart = System.currentTimeMillis();
                     regex = Lexer.preProcessString(regex);
                     Thompson thompson = new Thompson(regex);
                     nfa = thompson.executeAlgorithm();
-                    System.out.println("Insert the Word");
-                    boolean isAccepted = nfa.simulateAFN(reader.nextLine());
+                    long algorithmEnd = System.currentTimeMillis();
+                    long algorithmTime =  ((algorithmEnd - algorithmStart));
+
+                    System.out.println("Insert the word to Test");
+                    String word = reader.nextLine();
+                    long simulationStart = System.currentTimeMillis();
+                    boolean isAccepted = nfa.simulateAFN(word);
                     if(isAccepted){
                         System.out.println("String is Accepted");
                     }else {
                         System.out.println("String is Rejected");
                     }
+                    long simulationEnd = System.currentTimeMillis();
+                    long simulationTime = ((simulationEnd - simulationStart));
+                    System.out.println((algorithmTime  + simulationTime) + " Milliseconds");
+
                 }
                 case "2" -> {
                     try{
+                        long algorithmStart = System.currentTimeMillis();
                         FA dfa = nfa.convertToSubSets(regex);
                         System.out.println("Insert the word to Test");
                         dfa.graph(dfa, true);
-                        boolean isDFAAccepted = dfa.simulateAFD(reader.nextLine());
+                        long algorithmEnd = System.currentTimeMillis();
+                        long algorithmTime = ((algorithmEnd - algorithmStart));
+                        String word = reader.nextLine();
+                        long simulationStart = System.currentTimeMillis();
+                        boolean isDFAAccepted = dfa.simulateAFD(word);
                         if(isDFAAccepted){
                             System.out.println("String is Accepted");
                         }else {
                             System.out.println("String is Rejected");
                         }
+                        long simulationEnd = System.currentTimeMillis();
+                        long simulationTime = ((simulationEnd - simulationStart));
+                        System.out.println((algorithmTime  + simulationTime) + " Milliseconds");
 
                     }catch (Exception e){
                         System.out.println("Can't create before NFA");

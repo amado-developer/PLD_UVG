@@ -59,6 +59,10 @@ public class FA {
                     graph.add(state.getId() + "|" + transition.getKey() + "|" + transition.getValue());
                 }
             }
+
+            if(state.getTransitions().size() == 0){
+                graph.add(state.getId() + "|" + "" + "|" + "" + "|" + state.isFinal());
+            }
         }
 
         try {
@@ -68,7 +72,6 @@ public class FA {
             }
 
             writer.close();
-            System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
@@ -177,7 +180,6 @@ public class FA {
         ArrayList<ArrayList<State>> dStates = new ArrayList<>();
         ArrayList<State> states = new ArrayList<>();
         ArrayList<State> AFDStates = new ArrayList<>();
-        State newState;
         State s0 = this.states.stream()
                 .filter(s -> "s0".equals(s.getId()))
                 .findAny()
