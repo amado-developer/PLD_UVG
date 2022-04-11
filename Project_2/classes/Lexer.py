@@ -4,15 +4,15 @@ from classes.Token import Token
 class Lexer:
     def __init__(self, regex):
         self.regex = regex
-        self.operators = {'(': ["OPEN_PAR", 6], ')': ["CLOSE_PAR", 6], '*': ["KLEAN", 5], '+': ["PLUS"],
-                          '?': "QUESTION_MARK",  '&': 'CONCAT', '|': "OR"}
+        self.operators = {'(': ["OPEN_PAR", 6], ')': ["CLOSE_PAR", 6], '*': ["KLEAN", 5], '+': ["PLUS", 4],
+                          '?': ["QUESTION_MARK", 3],  '&': ['CONCAT', 2], '|': ['OR', 1]}
         self.position = 0
 
     def get_token(self):
         if self.position < len(self.regex):
             character = self.regex[self.position]
             self.position += 1
-            if self.operators[character]:
+            if character in self.operators and self.operators[character]:
                 token = self.operators[character]
                 return Token(token[0], character, token[1])
             return Token("CHAR", character, 0)
