@@ -1,11 +1,11 @@
 class Transition:
-    def __init__(self):
-        self.key = 0
-        self.value = 0
+    def __init__(self, key=0, value=0, obj=None):
+        self.key = key
+        self.value = value
 
-    def __object_init__(self, obj):
-        self.key = obj.key
-        self.value = obj.value
+        if obj:
+            self.key = obj.key
+            self.value = obj.value
 
     def add_transition(self, key, value):
         self.key = key
